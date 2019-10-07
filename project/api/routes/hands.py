@@ -1,10 +1,10 @@
 from flask import Blueprint
 from flask import jsonify
 from flask import request
-import requests
+import requests, json
 
 hands_blueprint = Blueprint('hands_blueprint', __name__)
-base_url = "http://localhost:5003"
+base_url = "http://gambot_card:5000/"
 
 @hands_blueprint.route('/post_hands', methods=['POST'])
 def post_hands():
@@ -12,9 +12,8 @@ def post_hands():
     url = base_url + "post_hands"
 
     if hands_data is not None:
-        post_hands_request = requests.request("POST", url, data = hands_data)
-
-        if post_hands_request['status'] is 200:
+        post_hands_request = requests.post(url, json = json.dumps(hands_data))
+        if post_hands_request.json()['status_code'] is 200:
             return jsonify({
                 'message': 'Hands were posted successfully' 
             }), 200
