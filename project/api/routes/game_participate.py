@@ -29,6 +29,7 @@ def post_game_participate():
         }), 400
 
 
+
 @player_in_game_blueprint.route('/get_players_in_game', methods=['GET'])
 def get_game_participate():
     game_url = base_game_url + "get_players_in_game"
@@ -51,3 +52,40 @@ def get_game_participate():
         return jsonify(players_in_game), 200 
     else:
         return jsonify({'message': 'Could not get players in game'}), 400
+
+
+
+@player_in_game_blueprint.route('/start_game', methods=['POST'])
+def start_game():
+    try:
+        url = base_game_url + "start_game"
+        start_game_request = requests.post(url)
+
+        if start_game_request.status_code is 200:
+            return jsonify({ 'message': 'Game Started' }), 200
+        elif start_game_request.status_code == 406:
+            return jsonify({ 'message': start_game_request.json()['message'] }), 406
+        else:
+            return jsonify({  'message': 'Could not start game' }), 400    
+
+    except Exception as e:
+        return jsonify({"error": "Error on starting Game", "message": str(e)}), 500
+
+
+
+@player_in_game_blueprint.route('/get_players_money', methods=['GET'])
+def get_players_money():
+    try:
+        url = base_game_url + "get_players_money"
+        start_game_request = requests.get(url, params={"player_id": request.args.get('player_id')})
+
+
+        if start_game_request.status_code is 200:
+            return jsonify(start_game_request.json()), 200
+        elif start_game_request.status_code == 406:
+            return jsonify({ 'message': start_game_request.json()['error'] }), 406
+        else:
+            return jsonify({  'message': "Could not get player's money" }), 400
+
+    except Exception as e:
+        return jsonify({"error": "Error on getting player's money", "message": str(e)}), 500
