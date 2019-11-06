@@ -13,7 +13,7 @@ def post_game_participate():
     url = base_game_url + "post_player_in_game"
 
     if player_in_game_data is not None:
-        post_player_in_request = requests.post(url, json = json.dumps(player_in_game_data))
+        post_player_in_request = requests.post(url, json = player_in_game_data)
 
         if post_player_in_request.status_code is 200:
             return jsonify({
