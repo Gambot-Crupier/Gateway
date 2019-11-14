@@ -17,6 +17,7 @@ services:
       - GAMBOT_CARD_URL=http://gambot_card:5000/
       - GAMBOT_GAME_URL=http://gambot_game:5000/
       - GAMBOT_PLAYER_URL=http://gambot_players:5000/
+      - GOOGLE_APPLICATION_CREDENTIALS=/src/service-account.json
     networks:
       - gambotnetwork
 
