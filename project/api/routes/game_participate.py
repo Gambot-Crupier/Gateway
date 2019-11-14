@@ -2,6 +2,7 @@ from flask import Blueprint
 from flask import jsonify
 from flask import request
 import requests, os, json, sys
+from project.api.routes.firebase import message_app
 
 player_in_game_blueprint = Blueprint('player_in_game_blueprint', __name__)
 base_game_url = os.getenv('GAMBOT_GAME_URL')
@@ -48,7 +49,15 @@ def get_game_participate():
                 players_in_game['players'][index] = get_player_request.json()
             else:
                 return jsonify({'message': 'Could not get player with Id ' + player['player_id']}), 400
+            try:
+                data = {
+                    'message': 'Atualiza'
+                }
 
+                message_app(data, str(players_in_game['game_id']))
+            except Exception as e:
+                print(e)
+                return jsonify({'message': 'Firebase deu erro'}), 400
         return jsonify(players_in_game), 200 
     else:
         return jsonify({'message': 'Could not get players in game'}), 400
