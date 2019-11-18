@@ -56,7 +56,6 @@ def get_game_participate():
 
                 message_app(data, str(players_in_game['game_id']))
             except Exception as e:
-                print(e)
                 return jsonify({'message': 'Firebase deu erro'}), 400
         return jsonify(players_in_game), 200 
     else:
