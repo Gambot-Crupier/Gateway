@@ -1,9 +1,9 @@
 from typing import List
-
 from flask import Blueprint
 from flask import jsonify
 from flask import request
 import requests
+import json
 
 auth_blueprint = Blueprint('auth_blueprint', __name__)
 
@@ -13,13 +13,12 @@ Nickname, email, password, password confirmation
 @auth_blueprint.route('/sign-up-gateway', methods=['POST'])
 def sign_up_gateway():
     user_data = request.get_json()
-    print(user_data)
-    print(1)
     url = "http://localhost:5001/sign-up"
 
     if user_data is not None:
-        print('oi')
-        sign_up_request = requests.request("POST", url, data = user_data)
+        user_data = json.dumps(user_data)
+        sign_up_request = requests.request("POST",url, data = user_data,
+                                    headers = {'Accept': 'application/json', 'content-type' : 'application/json'})
 
         print(sign_up_request)
         if sign_up_request['status'] is 200:
