@@ -17,13 +17,9 @@ def post_game_participate():
         post_player_in_request = requests.post(url, json = player_in_game_data)
 
         if post_player_in_request.status_code is 200:
-            return jsonify({
-                'message': 'Player added to game'
-            }), 200
+            return jsonify(post_player_in_request.json()), post_player_in_request.status_code
         else:
-            return jsonify({
-                'message': 'Could not post player in game'
-            }), 400
+            return jsonify(post_player_in_request.json()), post_player_in_request.status_code
     else:
         return jsonify({
             'message': 'No data was passed'
@@ -60,6 +56,27 @@ def get_game_participate():
         return jsonify(players_in_game), 200 
     else:
         return jsonify({'message': 'Could not get players in game'}), 400
+
+
+
+
+@player_in_game_blueprint.route('/delete_player_in_game', methods=['DELETE'])
+def delete_player_in_game():
+    try:
+        game_url = base_game_url + "delete_player_in_game"
+        PARAMS={"player_id": request.args.get('player_id'), "game_id": request.args.get('game_id')}
+
+        delete_player_request = requests.request("DELETE", game_url, params=PARAMS)
+        
+        if delete_player_request.status_code is 200:
+            # print(delete_player_request.json(), file=sys.stderr)
+            return jsonify(delete_player_request.json()), 200
+
+        else:
+            return jsonify(delete_player_request.json()), 400
+
+    except Exception as e:
+        return jsonify({"error": "Error on starting Game", "message": str(e)}), 500
 
 
 

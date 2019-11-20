@@ -7,7 +7,6 @@ from project.api.routes.game_participate import player_in_game_blueprint
 from project.api.routes.round import round_blueprint
 import firebase_admin
 
-
 # instantiate the app
 app = Flask(__name__)
 
