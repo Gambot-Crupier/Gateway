@@ -44,7 +44,7 @@ def create_round():
         return jsonify({
             "message": 'Erro ao se comunicar com o serviço de games.'
         }), 400
-=======
+
 import requests, os
 
 round_blueprint = Blueprint('round_blueprint', __name__)
