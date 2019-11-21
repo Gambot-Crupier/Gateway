@@ -42,7 +42,22 @@ def get_hands():
             'message': 'Could not get hands'
         }), 400
 
+@hands_blueprint.route('/get_winner', methods=['POST'])
+def get_winner():
+    url = base_url + 'get_winner'
+    player_list = requests.get_json()
 
+    get_winner_request = requests.request("POST", url, data = player_list,
+                                        headers = {'Accept': 'application/json', 'content-type' : 'application/json'})
+    
+    if get_winner_request.status_code is 200:
+        return jsonify({
+            'winner': response.player_id
+        }), 200
+    else:
+        return jsonify({
+            'message': response.message
+        }), 400
 
 @hands_blueprint.route("/get_player_hand", methods=["GET"])
 def get_player_hand():
