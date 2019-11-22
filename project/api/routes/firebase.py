@@ -6,11 +6,8 @@ def create_topic(players_list, game_id):
 
     return response
 
-def message_app(data, game_id):
-    players_list = PlayerInGame.query.filter_by(game_id = game_id).all()
-    
-    for player in players_list:
-        message = messaging.Message(data = data, token = player.device_id)
-        response = messaging.send(message)
+def message_app(data, game_id, device_id):    
+    message = messaging.Message(data = data, token = device_id)
+    response = messaging.send(message)
 
     return response
