@@ -50,7 +50,7 @@ def get_game_participate():
                     'message': 'Atualiza'
                 }
 
-                message_app(data, str(players_in_game['game_id']))
+                message_app(data, str(players_in_game['game_id']), player['device_id'])
             except Exception as e:
                 return jsonify({'message': 'Firebase deu erro'}), 400
         return jsonify(players_in_game), 200 
