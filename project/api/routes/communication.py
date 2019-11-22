@@ -62,3 +62,18 @@ def get_player_id():
        
     except Exception as e:
         return jsonify({"error": "Erro ao tentar recuperar o Id do player", "message": str(e)}), 500
+
+
+@communication_blueprint.route('/distribuite_cards', methods=['GET'])
+def distribuite_cards():
+    try:
+        url = base_game_url + "distribuite_cards"
+
+        distribuite_cards_request = requests.get(url)
+
+        print(distribuite_cards_request, file=sys.stderr)
+
+        return jsonify(distribuite_cards_request.json()), distribuite_cards_request.status_code
+       
+    except Exception as e:
+        return jsonify({"error": "Erro ao tentar recuperar se as cartas devem ser distrubuídas", "message": str(e)}), 500
