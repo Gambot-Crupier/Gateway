@@ -56,11 +56,11 @@ def get_winner():
     
     if get_winner_request.status_code is 200:
         return jsonify({
-            'winner': response.player_id
+            'winner': get_winner_request.player_id
         }), 200
     else:
         return jsonify({
-            'message': response.message
+            'message': get_winner_request.message
         }), 400
 
 @hands_blueprint.route("/get_player_hand", methods=["GET"])
