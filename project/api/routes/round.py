@@ -7,6 +7,21 @@ round_blueprint = Blueprint('round_blueprint', __name__)
 base_game_url = os.getenv('GAMBOT_GAME_URL')
 base_player_url = os.getenv('GAMBOT_PLAYER_URL')
 
+@round_blueprint.route('/get_round_id', methods=['GET'])
+def get_round_id:
+    game_url = base_game_url + 'get_round_id'
+
+    response = requests.request("GET", game_url)
+
+    if response.status_code is 200:
+        return jsonify({
+            "round_id": response.round_id
+        }), 200
+    else:
+        return jsonify({
+            "message": 'Could not get round_id'
+        }), 400
+
 @round_blueprint.route('/device_id_list', methods=['POST'])
 def get_device_id():
     player_url = base_player_url + "list_device_id"
