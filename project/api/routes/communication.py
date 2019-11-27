@@ -71,8 +71,6 @@ def distribuite_cards():
 
         distribuite_cards_request = requests.get(url)
 
-        print(distribuite_cards_request, file=sys.stderr)
-
         return jsonify(distribuite_cards_request.json()), distribuite_cards_request.status_code
        
     except Exception as e:
