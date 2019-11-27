@@ -12,11 +12,27 @@ base_player_url = os.getenv('GAMBOT_PLAYER_URL')
 @communication_blueprint.route('/post_player_id', methods=['POST'])
 def post_player_id():
     try:
-        url = base_player_url + "post_player_id"
+        res = {
+            "message_player_position": '',
+            "status_player_position": '',
+            "message_player_id": '',
+            "status_player_id": ''
+        }
+        
+        url = base_game_url + "post_player_position"
+        post_player_position_request = requests.post(url, params={"player_id": request.args.get('player_id')})
+        
+        res['message_player_position'] = post_player_position_request.json()['message']
+        res['status_player_position'] = post_player_position_request.status_code
 
+
+        url = base_player_url + "post_player_id"
         post_player_id_request = requests.post(url, params = {'player_id': request.args.get('player_id')})
 
-        return jsonify(post_player_id_request.json()), post_player_id_request.status_code
+        res['message_player_id'] = post_player_id_request.json()
+        res['status_player_id'] = post_player_id_request.status_code
+
+        return jsonify(res), post_player_id_request.status_code
        
     except Exception as e:
         return jsonify({"error": "Erro em mandar o Id do Player", "message": str(e)}), 500
