@@ -18,9 +18,11 @@ def post_player_id():
             "message_player_id": '',
             "status_player_id": ''
         }
-        
+
+        data = request.get_json()
         url = base_game_url + "post_player_position"
-        post_player_position_request = requests.post(url, params={"player_id": request.args.get('player_id')})
+        post_player_position_request = requests.request("POST",url, json = data,
+                                        headers = {'Accept': 'application/json', 'content-type' : 'application/json'})
         
         res['message_player_position'] = post_player_position_request.json()['message']
         res['status_player_position'] = post_player_position_request.status_code
