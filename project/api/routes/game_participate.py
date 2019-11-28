@@ -45,14 +45,7 @@ def get_game_participate():
                 players_in_game['players'][index] = get_player_request.json()
             else:
                 return jsonify({'message': 'Could not get player with Id ' + player['player_id']}), 400
-            try:
-                data = {
-                    'message': 'Atualiza'
-                }
-
-                message_app(data, str(players_in_game['game_id']))
-            except Exception as e:
-                return jsonify({'message': 'Firebase deu erro'}), 400
+        
         return jsonify(players_in_game), 200 
     else:
         return jsonify({'message': 'Could not get players in game'}), 400

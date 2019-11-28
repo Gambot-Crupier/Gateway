@@ -59,25 +59,6 @@ def create_round():
         return jsonify({
             "message": 'Erro ao se comunicar com o serviço de games.'
         }), 400
-=======
-import requests, os
-
-round_blueprint = Blueprint('round_blueprint', __name__)
-base_game_url = os.getenv('GAMBOT_GAME_URL')
-
-
-@round_blueprint.route('/create_round', methods=['POST'])
-def create_round():
-    url = base_game_url + "create_round"
-
-    try:
-        create_round_request = requests.post(url)
-        return jsonify(create_round_request.json()), create_round_request.status_code
-
-    except Exception as e:
-        return jsonify({"error": "Error on Creating Round", "message": str(e)}), 502
-
-
 
 @round_blueprint.route('/get_round_bet', methods=['GET'])
 def get_round_bet():
