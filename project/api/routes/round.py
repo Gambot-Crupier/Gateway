@@ -123,11 +123,11 @@ def get_player_bet():
 @round_blueprint.route('/pay_bet', methods=['POST'])
 def pay_bet():
     url = base_game_url + "pay_bet"
-    params = {"game_id": request.args.get('game_id'), "player_id": request.args.get('player_id'), 
-                "round_id": request.args.get('round_id')}
+    data = request.get_json()
 
     try:
-        pay_bet_request = requests.request("POST", url, params=params)
+        pay_bet_request = requests.request("POST", url, json=data,
+                           headers = {'Accept': 'application/json', 'content-type' : 'application/json'})
         return jsonify(pay_bet_request.json()), pay_bet_request.status_code
 
     except Exception as e:
