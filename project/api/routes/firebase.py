@@ -6,9 +6,8 @@ def create_topic(players_list, game_id):
 
     return response
 
-def message_app(data, game_id):
-    topic = 'Gambot'
-    message = messaging.Message(topic = topic, data = data)
+def message_app(data, game_id, device_id):    
+    message = messaging.Message(data = data, token = device_id)
     response = messaging.send(message)
-    
+
     return response

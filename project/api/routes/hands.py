@@ -1,31 +1,35 @@
 from flask import Blueprint
 from flask import jsonify
 from flask import request
-import requests, json, os
+import requests, json, os, sys
 
 hands_blueprint = Blueprint('hands_blueprint', __name__)
 base_url = os.getenv('GAMBOT_CARD_URL')
+base_game_url = os.getenv('GAMBOT_GAME_URL')
 
 @hands_blueprint.route('/post_hands', methods=['POST'])
 def post_hands():
-    hands_data = request.get_json()
-    url = base_url + "post_hands"
+    try:
+        hands_data = request.get_json()
+        url_post_hands = base_url + "post_hands"
+        url_get_round = base_game_url + "get_round"
 
-    if hands_data is not None:
-        post_hands_request = requests.post(url, json = json.dumps(hands_data))
+        get_round_request = requests.get(url_get_round)
+        round_id = get_round_request.json()['id']
 
-        if post_hands_request.status_code is 200:
-            return jsonify({
-                'message': 'Hands were posted successfully'
-            }), 200
+        for hand in hands_data:
+            hand['round_id'] = round_id
+            print(hand, file=sys.stderr)
+
+        if hands_data is not None:
+            post_hands_request = requests.post(url_post_hands, json = hands_data)
+
+            return jsonify(post_hands_request.json()), post_hands_request.status_code
         else:
-            return jsonify({
-                'message': 'Could not post hands'
-            }), 400
-    else:
-        return jsonify({
-            'message': 'No data was passed'
-        }), 400
+            return jsonify({ 'message': 'Nenhum dado foi passado!'}), 500
+    
+    except Exception as e:
+        return jsonify({"error": "Erro ao tentar salvar as mãos dos jogadores", "message": str(e)}), 500
 
 
 @hands_blueprint.route('/get_hands', methods=['GET'])
@@ -42,7 +46,22 @@ def get_hands():
             'message': 'Could not get hands'
         }), 400
 
+@hands_blueprint.route('/get_winner', methods=['POST'])
+def get_winner():
+    url = base_url + 'get_winner'
+    player_list = requests.get_json()
 
+    get_winner_request = requests.request("POST", url, data = player_list,
+                                        headers = {'Accept': 'application/json', 'content-type' : 'application/json'})
+    
+    if get_winner_request.status_code is 200:
+        return jsonify({
+            'winner': get_winner_request.player_id
+        }), 200
+    else:
+        return jsonify({
+            'message': get_winner_request.message
+        }), 400
 
 @hands_blueprint.route("/get_player_hand", methods=["GET"])
 def get_player_hand():
