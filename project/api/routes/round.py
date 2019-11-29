@@ -153,10 +153,11 @@ def raise_bet():
 @round_blueprint.route('/leave_match', methods=['POST'])
 def leave_match():
     url = base_game_url + "leave_match"
-    params = {"game_id": request.args.get('game_id'), "player_id": request.args.get('player_id')}
+    data = request.get_json()
 
     try:
-        leave_match_request = requests.request("POST", url, params=params)
+        leave_match_request = requests.request("POST", url, json=data,
+                            headers = {'Accept': 'application/json', 'content-type' : 'application/json'})
         return jsonify(leave_match_request.json()), leave_match_request.status_code
 
     except Exception as e:
