@@ -107,3 +107,52 @@ def get_players_money():
 
     except Exception as e:
         return jsonify({"error": "Error on getting player's money", "message": str(e)}), 500
+
+
+@player_in_game_blueprint.route('/get_players_ranking', methods=['GET'])
+def get_players_ranking():
+    game_url = base_game_url + "get_players_in_game"
+    player_url = base_player_url + "get_user_by_id"
+
+    get_players_id_request = requests.request("GET", game_url)
+
+
+    if get_players_id_request.status_code is 200:
+        players_in_game = get_players_id_request.json()
+
+        for index, player in enumerate(players_in_game['players']):
+            get_player_name_request = requests.request("GET", player_url, params={"user_id": player['player_id']})
+
+            if get_player_name_request.status_code is 200:
+                k
+            else:
+                return jsonify({'message': 'Could not get player with Id ' + player['player_id']}), 400
+        
+        return jsonify(players_in_game), 200   
+    else:
+        return jsonify({'message': 'Could not get players in game'}), 400
+
+
+
+@player_in_game_blueprint.route('/get_players_in_game', methods=['GET'])
+def get_game_participate():
+    game_url = base_game_url + "get_players_in_game"
+    player_url = base_player_url + "get_user_by_id"
+
+    get_players_id_request = requests.request("GET", game_url)
+    
+    if get_players_id_request.status_code is 200:
+        players_in_game = get_players_id_request.json()
+
+
+        for index, player in enumerate(players_in_game['players']):
+            get_player_request = requests.request("GET", player_url, params={"user_id": player['player_id']})
+            
+            if get_player_request.status_code is 200:
+                players_in_game['players'][index] = get_player_request.json()
+            else:
+                return jsonify({'message': 'Could not get player with Id ' + player['player_id']}), 400
+        
+        return jsonify(players_in_game), 200 
+    else:
+        return jsonify({'message': 'Could not get players in game'}), 400
