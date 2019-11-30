@@ -29,7 +29,7 @@ def post_player_id():
 
 
         url = base_player_url + "post_player_id"
-        post_player_id_request = requests.post(url, params = {'player_id': request.args.get('player_id')})
+        post_player_id_request = requests.post(url, params = {'player_id': data['player_id']})
 
         res['message_player_id'] = post_player_id_request.json()
         res['status_player_id'] = post_player_id_request.status_code
