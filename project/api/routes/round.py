@@ -178,3 +178,15 @@ def get_current_player():
         return jsonify({
             "message": str(e)
         }), 400
+
+
+@round_blueprint.route('/start_round', methods=['POST'])
+def start_round():
+    url = base_game_url + "start_round"
+
+    try:
+        start_round_request = requests.request("POST", url)
+        return jsonify(start_round_request.json()), start_round_request.status_code
+
+    except Exception as e:
+        return jsonify({"error": "Erro ao tentar iniciar o round.", "message": str(e)}), 502
