@@ -20,7 +20,7 @@ def post_table_cards():
             }), 200
         else:
             return jsonify({
-                'message': 'Could not post table_cards'
+                'message': post_table_cards_request.json()
             }), 400
     else:
         return jsonify({

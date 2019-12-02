@@ -46,7 +46,7 @@ def get_round_cards_number():
         }), 200
     else:
         return jsonify({
-            'message': 'deu ruim'
+            'message': cards_response.json()
         }), 400
 
 
