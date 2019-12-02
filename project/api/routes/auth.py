@@ -20,7 +20,6 @@ def sign_up_gateway():
         sign_up_request = requests.request("POST",url, data = user_data,
                                     headers = {'Accept': 'application/json', 'content-type' : 'application/json'})
 
-        print(sign_up_request)
         if sign_up_request['status'] is 200:
             return jsonify({
                 'message': 'User account was created successfully' 
@@ -30,7 +29,6 @@ def sign_up_gateway():
                 'message': 'Could not create user account'
             }), 400
     else:
-        print(2)
         return jsonify({
             'message': 'Could not reach Player server'
         }), 400

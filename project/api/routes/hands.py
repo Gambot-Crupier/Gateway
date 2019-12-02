@@ -32,6 +32,24 @@ def post_hands():
         return jsonify({"error": "Erro ao tentar salvar as mãos dos jogadores", "message": str(e)}), 500
 
 
+@hands_blueprint.route('/get_round_cards_number', methods=['GET'])
+def get_round_cards_number():
+    url = base_url + 'get_round_cards_number'
+    round_id = request.args.get('round_id')
+    params = {'round_id': round_id}
+
+    cards_response = requests.request("GET", url, params = params)
+
+    if cards_response.status_code is 200:
+        return jsonify({
+            'number': cards_response.json()
+        }), 200
+    else:
+        return jsonify({
+            'message': 'deu ruim'
+        }), 400
+
+
 @hands_blueprint.route('/get_hands', methods=['GET'])
 def get_hands():
     url = base_url + "get_hands"

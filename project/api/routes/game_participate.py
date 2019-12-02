@@ -25,6 +25,18 @@ def post_game_participate():
             'message': 'No data was passed'
         }), 400
 
+@player_in_game_blueprint.route('/get_user_by_id', methods=['GET'])
+def get_player_name():
+    player_url = base_player_url + 'get_user_by_id'
+    user_id = request.args.get('user_id')
+    params = {'user_id': user_id}
+
+    player_request = requests.request("GET", player_url, params = params)
+
+    if player_request.status_code is 200:
+        return jsonify({
+            'player': player_request.json()
+        }), 200 
 
 
 @player_in_game_blueprint.route('/get_players_in_game', methods=['GET'])
