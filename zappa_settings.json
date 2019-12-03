@@ -1,6 +1,6 @@
 {
     "production": {
-        "app_function": "project.__init__.app",
+        "app_function": "manage.app",
         "aws_region": "sa-east-1",
         "project_name": "GambotGateway",
         "runtime": "python3.6",
