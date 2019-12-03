@@ -56,7 +56,7 @@ def get_game_participate():
             if get_player_request.status_code is 200:
                 players_in_game['players'][index] = get_player_request.json()
             else:
-                return jsonify({'message': 'Could not get player with Id ' + player['player_id']}), 400
+                return jsonify({'message': 'Could not get player with Id ' + str(player['player_id'])}), 400
         
         return jsonify(players_in_game), 200 
     else:
@@ -116,6 +116,26 @@ def get_players_money():
             return jsonify({ 'message': start_game_request.json()['error'] }), 406
         else:
             return jsonify({  'message': "Could not get player's money" }), 400
+
+    except Exception as e:
+        return jsonify({"error": "Error on getting player's money", "message": str(e)}), 500
+
+
+
+@player_in_game_blueprint.route('/get_total_players_in_game', methods=['GET'])
+def get_total_players_in_game():
+    try:
+        url = base_game_url + "get_players_in_game"
+        get_total_players_in_game_request = requests.request("GET", url)
+
+
+        if get_total_players_in_game_request.status_code is 200:
+            players_array = get_total_players_in_game_request.json()['players']
+            players_qty = len(players_array)
+
+            return jsonify({'qtd_players': players_qty}), 200
+        else:
+            return jsonify({ 'message': "Não foi possível recuperar a quantidade de jogadores." }), 400
 
     except Exception as e:
         return jsonify({"error": "Error on getting player's money", "message": str(e)}), 500
