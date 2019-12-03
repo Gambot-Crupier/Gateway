@@ -20,12 +20,14 @@ def post_player_id():
         }
 
         data = request.get_json()
-        url = base_game_url + "post_player_position"
-        post_player_position_request = requests.request("POST",url, json = data,
-                                        headers = {'Accept': 'application/json', 'content-type' : 'application/json'})
-        
-        res['message_player_position'] = post_player_position_request.json()['message']
-        res['status_player_position'] = post_player_position_request.status_code
+
+        if(data['player_id'] > 0 ):
+            url = base_game_url + "post_player_position"
+            post_player_position_request = requests.request("POST",url, json = data,
+                                            headers = {'Accept': 'application/json', 'content-type' : 'application/json'})
+            
+            res['message_player_position'] = post_player_position_request.json()['message']
+            res['status_player_position'] = post_player_position_request.status_code
 
 
         url = base_player_url + "post_player_id"
