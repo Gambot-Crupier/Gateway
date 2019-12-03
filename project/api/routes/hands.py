@@ -11,13 +11,15 @@ base_game_url = os.getenv('GAMBOT_GAME_URL')
 def post_hands():
     try:
         hands_data = request.get_json()
+        hands = hands_data['hands']
+
         url_post_hands = base_url + "post_hands"
         url_get_round = base_game_url + "get_round"
 
         get_round_request = requests.get(url_get_round)
         round_id = get_round_request.json()['id']
 
-        for hand in hands_data:
+        for hand in hands:
             hand['round_id'] = round_id
             print(hand, file=sys.stderr)
 
@@ -46,7 +48,7 @@ def get_round_cards_number():
         }), 200
     else:
         return jsonify({
-            'message': 'deu ruim'
+            'message': cards_response.json()
         }), 400
 
 
@@ -67,18 +69,20 @@ def get_hands():
 @hands_blueprint.route('/get_winner', methods=['POST'])
 def get_winner():
     url = base_url + 'get_winner'
-    player_list = requests.get_json()
+    player_list = request.get_json()
 
-    get_winner_request = requests.request("POST", url, data = player_list,
+    get_winner_request = requests.request("POST", url, json = player_list,
                                         headers = {'Accept': 'application/json', 'content-type' : 'application/json'})
     
     if get_winner_request.status_code is 200:
+        data = get_winner_request.json()
         return jsonify({
-            'winner': get_winner_request.player_id
+            'winner': data['player_id']
         }), 200
     else:
+        data = get_winner_request.json()
         return jsonify({
-            'message': get_winner_request.message
+            'message': data['message']
         }), 400
 
 @hands_blueprint.route("/get_player_hand", methods=["GET"])

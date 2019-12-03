@@ -96,6 +96,7 @@ def round_redirect():
 def get_player_money():
     url = base_game_url + "get_player_money"
     params = {"game_id": request.args.get('game_id'), "player_id": request.args.get('player_id')}
+    print(params)
 
     try:
         get_player_money_request = requests.request("GET", url, params=params)
