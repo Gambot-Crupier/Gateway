@@ -191,3 +191,35 @@ def start_round():
 
     except Exception as e:
         return jsonify({"error": "Erro ao tentar iniciar o round.", "message": str(e)}), 502
+
+
+
+
+
+@round_blueprint.route('/get_continue', methods=['GET'])
+def get_continue():
+
+    url = base_game_url + "get_continue"
+
+    try:
+        get_continue_request = requests.request("GET", url)
+        return jsonify(get_continue_request.json()), get_continue_request.status_code
+
+    except Exception as e:
+        return jsonify({"error": "Erro ao tentar recuperar continuidade.", "message": str(e)}), 502
+
+
+
+@round_blueprint.route('/post_continue', methods=['POST'])
+def post_continue():
+
+    data = request.get_json()
+    url = base_game_url + "post_continue"
+
+    try:
+        post_continue_request = requests.request("POST", url, json=data,
+                            headers = {'Accept': 'application/json', 'content-type' : 'application/json'})
+        return jsonify(post_continue_request.json()), post_continue_request.status_code
+
+    except Exception as e:
+        return jsonify({"error": "Erro ao tentar mandar ação de continuidade.", "message": str(e)}), 502
