@@ -10,21 +10,21 @@ base_game_url = os.getenv('GAMBOT_GAME_URL')
 @hands_blueprint.route('/post_hands', methods=['POST'])
 def post_hands():
     try:
-        hands_data = request.get_json()
-        hands = hands_data['hands']
+        hands = request.get_json()
+        # hands = hands_data['hands']
 
-        url_post_hands = base_url + "post_hands"
         url_get_round = base_game_url + "get_round"
-
         get_round_request = requests.get(url_get_round)
+        
         round_id = get_round_request.json()['id']
 
         for hand in hands:
             hand['round_id'] = round_id
-            print(hand, file=sys.stderr)
 
-        if hands_data is not None:
-            post_hands_request = requests.post(url_post_hands, json = hands_data)
+        url_post_hands = base_url + "post_hands"
+
+        if hands is not None:
+            post_hands_request = requests.post(url_post_hands, json = hands)
 
             return jsonify(post_hands_request.json()), post_hands_request.status_code
         else:
