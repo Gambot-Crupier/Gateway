@@ -223,3 +223,18 @@ def post_continue():
 
     except Exception as e:
         return jsonify({"error": "Erro ao tentar mandar ação de continuidade.", "message": str(e)}), 502
+
+
+
+
+@round_blueprint.route('/get_round', methods=['GET'])
+def get_round():
+
+    url = base_game_url + "get_round"
+
+    try:
+        get_round_request = requests.request("GET", url)
+        return jsonify(get_round_request.json()), get_round_request.status_code
+
+    except Exception as e:
+        return jsonify({"error": "Erro ao tentar recuperar continuidade.", "message": str(e)}), 502
