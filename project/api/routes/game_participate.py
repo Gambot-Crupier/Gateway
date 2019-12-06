@@ -44,7 +44,7 @@ def get_game_participate():
             if get_player_request.status_code is 200:
                 players_in_game['players'][index] = get_player_request.json()
             else:
-                return jsonify({'message': 'Could not get player with Id ' + player['player_id']}), 400
+                return jsonify({'message': 'Could not get player with Id '}), 400
         
         return jsonify(players_in_game), 200 
     else:
@@ -109,6 +109,10 @@ def get_players_money():
         return jsonify({"error": "Error on getting player's money", "message": str(e)}), 500
 
 
+def order_players(response):
+    return response['players']['name']
+    
+
 @player_in_game_blueprint.route('/get_players_ranking', methods=['GET'])
 def get_players_ranking():
     game_url = base_game_url + "get_players_in_game"
@@ -120,39 +124,29 @@ def get_players_ranking():
     if get_players_id_request.status_code is 200:
         players_in_game = get_players_id_request.json()
 
+        response = {
+            "players": []
+        }
+
         for index, player in enumerate(players_in_game['players']):
+            print(player, file=sys.stderr)
+            print(index, file=sys.stderr)
             get_player_name_request = requests.request("GET", player_url, params={"user_id": player['player_id']})
-
-            if get_player_name_request.status_code is 200:
-                k
-            else:
-                return jsonify({'message': 'Could not get player with Id ' + player['player_id']}), 400
-        
-        return jsonify(players_in_game), 200   
-    else:
-        return jsonify({'message': 'Could not get players in game'}), 400
-
-
-
-@player_in_game_blueprint.route('/get_players_in_game', methods=['GET'])
-def get_game_participate():
-    game_url = base_game_url + "get_players_in_game"
-    player_url = base_player_url + "get_user_by_id"
-
-    get_players_id_request = requests.request("GET", game_url)
-    
-    if get_players_id_request.status_code is 200:
-        players_in_game = get_players_id_request.json()
-
-
-        for index, player in enumerate(players_in_game['players']):
-            get_player_request = requests.request("GET", player_url, params={"user_id": player['player_id']})
             
-            if get_player_request.status_code is 200:
-                players_in_game['players'][index] = get_player_request.json()
+            if get_player_name_request.status_code is 200:
+                players_in_game['players'][index] = get_player_name_request.json()
+
+                response['players'].append({
+                    "player_id": player['player_id'],
+                    "money": player['player_money'],
+                    "player_name": players_in_game['players'][index]
+                })
+
             else:
-                return jsonify({'message': 'Could not get player with Id ' + player['player_id']}), 400
+                return jsonify({'message': 'Could not get player with Id'}), 400
         
-        return jsonify(players_in_game), 200 
+        response["players"].sort(key=order_players)
+
+        return json.dumps(response), 200  
     else:
         return jsonify({'message': 'Could not get players in game'}), 400

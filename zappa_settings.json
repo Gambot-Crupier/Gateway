@@ -1,0 +1,17 @@
+{
+    "production": {
+        "app_function": "manage.app",
+        "aws_region": "sa-east-1",
+        "project_name": "GambotGateway",
+        "runtime": "python3.6",
+        "s3_bucket": "gambot-gateway-bucket",
+        "environment_variables": {
+            "FLASK_ENV": "production",
+            "APP_SETTINGS": "project.config.ProductionConfig",
+            "GAMBOT_CARD_URL":"https://gambot-card-prod.herokuapp.com/",
+            "GAMBOT_GAME_URL":"https://gambot-game-prod.herokuapp.com/",
+            "GAMBOT_PLAYER_URL":"https://gambot-player-prod.herokuapp.com/"
+        }
+    }
+    
+}
