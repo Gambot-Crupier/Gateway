@@ -122,7 +122,7 @@ def get_players_money():
 
 
 def order_players(response):
-    return response['players']['name']
+    return response['money']
     
 
 @player_in_game_blueprint.route('/get_players_ranking', methods=['GET'])
@@ -141,8 +141,7 @@ def get_players_ranking():
         }
 
         for index, player in enumerate(players_in_game['players']):
-            print(player, file=sys.stderr)
-            print(index, file=sys.stderr)
+
             get_player_name_request = requests.request("GET", player_url, params={"user_id": player['player_id']})
             
             if get_player_name_request.status_code is 200:
@@ -156,7 +155,7 @@ def get_players_ranking():
 
             else:
                 return jsonify({'message': 'Could not get player with Id'}), 400
-        
+
         response["players"].sort(key=order_players)
 
         return json.dumps(response), 200  
