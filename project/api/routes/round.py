@@ -136,6 +136,18 @@ def pay_bet():
 
 
 
+@round_blueprint.route('/get_round_actions', methods=['GET'])
+def get_actions():
+    url = base_game_url + 'get_round_actions'
+
+    try:
+        get_actions_request = requests.request("GET", url)
+        return jsonify(get_actions_request.json()), get_actions_request.status_code
+    except Exception as e:
+        return jsonify({
+            "error": str(e)
+        }), 400
+
 @round_blueprint.route('/raise_bet', methods=['POST'])
 def raise_bet():
     url = base_game_url + "raise_bet"
