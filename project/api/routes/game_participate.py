@@ -150,13 +150,13 @@ def get_players_ranking():
                 response['players'].append({
                     "player_id": player['player_id'],
                     "money": player['player_money'],
-                    "player_name": players_in_game['players'][index]
+                    "player_name": players_in_game['players'][index]['name']
                 })
 
             else:
                 return jsonify({'message': 'Could not get player with Id'}), 400
 
-        response["players"].sort(key=order_players)
+        response["players"].sort(reverse= True, key=order_players)
 
         return json.dumps(response), 200  
     else:
